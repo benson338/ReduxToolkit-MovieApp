@@ -7,9 +7,12 @@ const Home = () => {
   const dispatch = useDispatch();
   // useDispatch returns the store's dispatch method to let you dispatch actions
 
+  const movieText = 'Harry';
+  const seriesText = 'Friends';
+
   useEffect(() => {
-    dispatch(fetchMovies());
-    dispatch(fetchShows());
+    dispatch(fetchMovies(movieText));
+    dispatch(fetchShows(seriesText));
   }, [dispatch]);
 
   return (
@@ -28,6 +31,5 @@ export default Home;
 //     .get(`?apiKey=${APIKey}&s=${movieText}&type=movie`)
 //     .catch((err) => console.log(err));
 //   // console.log(response);
-//   // after fetching, we need to update the state in store
 //   dispatch(addMovies(response.data));
 // };

@@ -2,19 +2,17 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import movieApi from '../../common/apis/movieApi';
 import { APIKey } from '../../common/apis/MovieApiKey';
 
-const fetchMovies = createAsyncThunk('movies/fetchMovies', async () => {
-  const movieText = 'Harry';
-  const response = await movieApi.get(
-    `?apiKey=${APIKey}&s=${movieText}&type=movie`
-  );
+const fetchMovies = createAsyncThunk('movies/fetchMovies', async (term) => {
+  // const movieText = 'Harry';
+  const response = await movieApi.get(`?apiKey=${APIKey}&s=${term}&type=movie`);
   // console.log(response);
   return response.data;
 });
 
-const fetchShows = createAsyncThunk('movies/fetchShows', async () => {
-  const seriesText = 'Friends';
+const fetchShows = createAsyncThunk('movies/fetchShows', async (term) => {
+  // const seriesText = 'Friends';
   const response = await movieApi.get(
-    `?apiKey=${APIKey}&s=${seriesText}&type=series`
+    `?apiKey=${APIKey}&s=${term}&type=series`
   );
   // console.log(response);
   return response.data;
@@ -30,6 +28,8 @@ const initialState = {
   movies: {},
   shows: {},
   selectedItem: {},
+  moviesLoading: true,
+  seriesLoading: true,
 };
 
 const moviesSlice = createSlice({
@@ -48,20 +48,25 @@ const moviesSlice = createSlice({
   },
   // "map object API"
   extraReducers: {
-    [fetchMovies.pending]: () => {
+    [fetchMovies.pending]: (state) => {
       console.log('Pending');
+      state.moviesLoading = true;
     },
     [fetchMovies.fulfilled]: (state, { payload }) => {
-      // payload is given by AsyncThunkPayloadCreator function (aka PaylooadCreator)
+      // payload is given by AsyncThunkPayloadCreator function (aka PayloadCreator)
       console.log('Movies Fetched Successfully!');
-      return { ...state, movies: payload };
+      return { ...state, movies: payload, moviesLoading: false };
     },
     [fetchMovies.rejected]: () => {
       console.log('Rejected');
     },
+    [fetchShows.pending]: (state) => {
+      console.log('Pending');
+      state.seriesLoading = true;
+    },
     [fetchShows.fulfilled]: (state, { payload }) => {
       console.log('Shows Fetched Successfully!');
-      return { ...state, shows: payload };
+      return { ...state, shows: payload, seriesLoading: false };
     },
     [fetchDetails.fulfilled]: (state, { payload }) => {
       console.log('Details Fetched Successfully!');

@@ -1,14 +1,19 @@
 import React from 'react';
+import Slider from 'react-slick';
 import { useSelector } from 'react-redux';
 import MovieCard from '../MovieCard/MovieCard';
 import './MovieListing.scss';
+import { Settings } from '../../common/settings';
 // import { getAllmovies } from '../../features/movies/moviesSlice';
+// https://react-slick.neostack.com/docs/get-started
 
 const MovieListing = () => {
   // const movies = useSelector(getAllmovies);
   // useSelector reads a value from the store state and subscribes to updates
-  const movies = useSelector((state) => state.movies.movies);
-  const shows = useSelector((state) => state.movies.shows);
+  // const movies = useSelector((state) => state.movies.movies);
+  const { movies, shows, moviesLoading, seriesLoading } = useSelector(
+    (state) => state.movies
+  );
   // console.log(movies);
 
   let renderMovies = '',
@@ -38,11 +43,23 @@ const MovieListing = () => {
     <div className="movie-wrapper">
       <div className="movie-list">
         <h2>Movies</h2>
-        <div className="movie-container">{renderMovies}</div>
+        <div className="movie-container">
+          {moviesLoading === true ? (
+            <div style={{ color: 'white' }}>...Loading</div>
+          ) : (
+            <Slider {...Settings}>{renderMovies}</Slider>
+          )}
+        </div>
       </div>
       <div className="show-list">
         <h2>Shows</h2>
-        <div className="movie-container">{renderShows}</div>
+        <div className="movie-container">
+          {seriesLoading === true ? (
+            <div style={{ color: 'white' }}>...Loading</div>
+          ) : (
+            <Slider {...Settings}>{renderShows}</Slider>
+          )}
+        </div>
       </div>
     </div>
   );

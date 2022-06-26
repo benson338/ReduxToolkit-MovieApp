@@ -1,14 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux/es/exports';
 import { Link } from 'react-router-dom';
+import { fetchMovies, fetchShows } from '../../features/movies/moviesSlice';
 import user from '../../images/user.png';
 import './Header.scss';
 
 const Header = () => {
+  const [term, setTerm] = useState('');
+  const dispatch = useDispatch();
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (term === '') return alert('Please enter a search term!');
+    dispatch(fetchMovies(term));
+    dispatch(fetchShows(term));
+    setTerm('');
+  };
+
   return (
     <div className="header">
-      <Link to="/">
-        <div className="logo">Movie App</div>
-      </Link>
+      <div className="logo">
+        <Link to="/">Movie App</Link>
+      </div>
+      <div className="search-bar">
+        <form onSubmit={handleSubmit}>
+          <input
+            type="text"
+            value={term}
+            placeholder="Search Movies or Shows"
+            onChange={(e) => setTerm(e.target.value)}
+          />
+          <button type="submit">
+            <i className="fa fa-search"></i>
+          </button>
+        </form>
+      </div>
       <div className="user-image">
         <img src={user} alt="user" />
       </div>
