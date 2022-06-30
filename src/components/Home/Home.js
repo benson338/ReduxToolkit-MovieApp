@@ -29,6 +29,7 @@ const Home = () => {
   useEffect(() => {
     fetchMovies();
     fetchShows();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
