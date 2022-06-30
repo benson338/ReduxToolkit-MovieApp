@@ -1,16 +1,14 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { getAllmovies } from '../../features/movies/moviesSlice';
 import MovieCard from '../MovieCard/MovieCard';
 import './MovieListing.scss';
 
 const MovieListing = () => {
-  const movies = useSelector(getAllmovies);
-  // const movies = useSelector((state) => state.movies.movies);
+  const { movies, shows } = useSelector((state) => state.movies);
   // useSelector reads a value from the store state and subscribes to updates
-  console.log(movies);
 
-  let renderMovies = '';
+  let renderMovies = '',
+    renderShows = '';
 
   renderMovies =
     movies.Response === 'True' ? (
@@ -23,11 +21,24 @@ const MovieListing = () => {
       </div>
     );
 
+  renderShows =
+    shows.Response === 'True' ? (
+      shows.Search.map((show, index) => <MovieCard key={index} data={show} />)
+    ) : (
+      <div className="shows-error">
+        <h3>{shows.Error}</h3>
+      </div>
+    );
+
   return (
     <div className="movie-wrapper">
       <div className="movie-list">
         <h2>Movies</h2>
         <div className="movie-container">{renderMovies}</div>
+      </div>
+      <div className="show-list">
+        <h2>Shows</h2>
+        <div className="movie-container">{renderShows}</div>
       </div>
     </div>
   );
